@@ -2,12 +2,24 @@ import React, { useState, useReducer } from "react";
 import { Text, StyleSheet, View, FlatList } from "react-native";
 import CardDetail from "../components/CardDetail";
 import { reducer, initialState } from '../utils/reducer';
+import { Button, Card, Overlay, Divider, Input } from 'react-native-elements';
 
 const CardsScreen = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <View>
+      <Button 
+        title='Sort by name ASC'
+        onPress={() => dispatch({type: 'sort_by_name_asc'})}
+      />
+
+      <Divider style={{ backgroundColor: 'white', paddingTop: 5, paddingBottom: 5 }} />
+
+      <Button 
+        title='Sort by name DSC'
+        onPress={() => dispatch({type: 'sort_by_name_dsc'})}
+      />
       <Text>{state.lastColorUsed}</Text>
       <FlatList 
         data={state.persons}
@@ -24,7 +36,7 @@ const CardsScreen = () => {
                 }}
                 onChangeData={(id, newPerson) => {
                   dispatch({type: 'change_person', payload: {
-                    personId: id, 
+                    personId: id.toString(), 
                     firstName: newPerson.firstName, 
                     lastName: newPerson.lastName, 
                     age: newPerson.age, 
@@ -37,6 +49,8 @@ const CardsScreen = () => {
         }
         keyExtractor={(item) => item.id}
       />
+
+
     </View>
   );
 };
