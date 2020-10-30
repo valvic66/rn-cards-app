@@ -14,19 +14,21 @@ const CardsScreen = () => {
         renderItem={({item}) => {
             return (
               <CardDetail
-                id={item.id}
+                id={item.id}  
                 firstName={item.firstName}
                 lastName={item.lastName}
                 age={item.age}
                 color={item.color}
                 onChangeColor={(id, newColor) => {
                   dispatch({type: 'change_last_color', payload: newColor});
+                }}
+                onChangeData={(id, newPerson) => {
                   dispatch({type: 'change_person', payload: {
-                    personId: '1', 
-                    firstName: 'new first name', 
-                    lastName: 'new last name', 
-                    age: 10, 
-                    color: 'new color'
+                    personId: id, 
+                    firstName: newPerson.firstName, 
+                    lastName: newPerson.lastName, 
+                    age: newPerson.age, 
+                    color: newPerson.color
                   }})
                 }}
               />
