@@ -5,13 +5,11 @@ export const initialState = {
       {id: '3', firstName: 'Andu', lastName: 'Micu', age: '10', color: 'blue'},
       {id: '4', firstName: 'Luca', lastName: 'Micu', age: '14', color: 'yellow'},
     ],
-    
+    personsBeforeFiltering: []
   }; 
 
 export const reducer = (state, action) => {
   switch(action.type) {
-    // case 'change_last_color':
-    //   return {...state, lastColorUsed: action.payload};
     case 'sort_by_name_asc':
       const sortedPersonsByNameAsc = state.persons.sort((a, b) => a.firstName.localeCompare(b.firstName));
       
@@ -20,6 +18,16 @@ export const reducer = (state, action) => {
       const sortedPersonsByNameDsc = state.persons.sort((a, b) => b.firstName.localeCompare(a.firstName));
         
       return {...state, persons: sortedPersonsByNameDsc};
+    case 'filter_by_age':
+      const { minAge, maxAge } = action.payload;
+      state.personsBeforeFiltering = state.persons;
+      const filteredPersonsByAge = state.persons.filter((person) => {
+        return Number(person.age) >= minAge && Number(person.age) <= maxAge;
+      });
+        
+      return {...state, persons: filteredPersonsByAge};
+    case 'reset_filters':
+      return {...state, persons: state.personsBeforeFiltering}
     case 'change_person':
       const { personId, firstName, lastName, age, color } = action.payload;
 

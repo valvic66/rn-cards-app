@@ -27,7 +27,7 @@ const CardDetail = ({id, firstName, lastName, age, color, onChangeData}) => {
   };
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Card style={styles.cardDetailWrapper}>
         <Card.Title style={getPreferedColor()}>{cardName}</Card.Title>
         <Card.Divider />
@@ -136,7 +136,7 @@ const WIDTH_80 = '80%';
 
 const styles = StyleSheet.create({
   cardDetailWrapper: {
-  
+    
   },
   overlayStyle: {
     width: WIDTH_80,
@@ -145,12 +145,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   overlayTextInputStyle: {
-    // height: 40, 
-    // borderColor: 'gray', 
-    // borderWidth: 1,
-    // fontSize: 18,
-    // paddingLeft: 5,
-    // borderRadius: 5,
   },
   closeIconStyle: {
     fontSize: 20,
