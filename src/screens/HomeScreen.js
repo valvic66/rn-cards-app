@@ -7,6 +7,7 @@ const HomeScreen = (props) => {
   return (
     <View style={styles.homeScreenWrapperStyle}>
       <Button title='Go to cards' onPress={() => props.navigation.navigate('Cards')} />
+      <Button title='Go to Json Api' onPress={() => props.navigation.navigate('JsonApi')} />
     </View>
   );
 };
