@@ -27,6 +27,24 @@ const CardDetail = ({id, firstName, lastName, age, color, onChangeData, onDelete
     setOverlayVisibility(!isOverlayVisible);
   };
 
+  const handleModalDataChange = (field, value) => {
+    switch(field) {
+      case 'firstName':
+        setOverlayData({...overlayData, firstName: value});
+        break;
+      case 'lastName':
+        setOverlayData({...overlayData, lastName: value});
+        break;
+      case 'age':
+        setOverlayData({...overlayData, age: value});
+        break;
+      case 'color':
+        setOverlayData({...overlayData, color: value});
+        break;
+      default:
+    }
+  }
+
   return (
     <View style={{flex: 1}}>
       <Card style={styles.cardDetailWrapper}>
@@ -58,19 +76,11 @@ const CardDetail = ({id, firstName, lastName, age, color, onChangeData, onDelete
         </View>
       </Card>
 
-      <DataOverlay 
+      <DataOverlay
         data={overlayData}
         isVisible={isOverlayVisible}
+        onModalDataChange={(field, value) => handleModalDataChange(field, value)}
         onToggle={() => toggleOverlayVisibility()}
-        onChangeFirstName={(firstName) => setOverlayData({...overlayData, firstName})}
-        onClearFirstName={() => setOverlayData({...overlayData, firstName: ''})}
-        onChangeLastName={(lastName) => setOverlayData({...overlayData, lastName})}
-        onClearLastName={() => setOverlayData({...overlayData, lastName: ''})}
-        onChangeAge={(age) => setOverlayData({...overlayData, age})}
-        onClearAge={() => setOverlayData({...overlayData, age: ''})}
-        onChangeColor={(color) => setOverlayData({...overlayData, color})}
-        onClearColor={() => setOverlayData({...overlayData, color: ''})}
-        onClose={() => toggleOverlayVisibility()}
         onSave={() => {
           onChangeData(id, overlayData);
           toggleOverlayVisibility();

@@ -5,19 +5,11 @@ import { Button, Card, Overlay, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const DataOverlay = ({
-  data, 
-  onChangeFirstName,
-  onClearFirstName,
-  onChangeLastName,
-  onClearLastName,
-  onChangeAge,
-  onClearAge,
-  onChangeColor,
-  onClearColor,
-  onSave, 
+  data,
+  onModalDataChange,
   onToggle, 
-  isVisible, 
-  onClose
+  onSave,
+  isVisible
 }) => {
   return (
     <View>
@@ -27,13 +19,13 @@ const DataOverlay = ({
             <Input
               placeholder="First name"
               style={styles.overlayTextInputStyle}
-              onChangeText={ firstName => onChangeFirstName(firstName)}
+              onChangeText={(value) => onModalDataChange('firstName', value)}
               value={data.firstName}
             />
             <Icon 
               style={styles.closeIconTextInputStyle}
               name='close'
-              onPress={() => onClearFirstName()}
+              onPress={() => onModalDataChange('firstName', '')}
             />
           </View>
 
@@ -41,13 +33,13 @@ const DataOverlay = ({
             <Input
               placeholder="Last name"
               style={styles.overlayTextInputStyle}
-              onChangeText={ lastName => onChangeLastName(lastName)}
+              onChangeText={(value) => onModalDataChange('lastName', value)}
               value={data.lastName}
             />
             <Icon 
               style={styles.closeIconTextInputStyle}
               name='close'
-              onPress={() => onClearLastName()}
+              onPress={() => onModalDataChange('lastName', '')}
             />
           </View>
 
@@ -55,13 +47,13 @@ const DataOverlay = ({
             <Input
               placeholder="Age"
               style={styles.overlayTextInputStyle}
-              onChangeText={ age => onChangeAge(age)}
+              onChangeText={(value) => onModalDataChange('age', value)}
               value={data.age}
             />
             <Icon 
               style={styles.closeIconTextInputStyle}
               name='close'
-              onPress={() => onClearAge()}
+              onPress={() => onModalDataChange('age', '')}
             />
           </View>
 
@@ -69,13 +61,13 @@ const DataOverlay = ({
             <Input
               placeholder="Color"
               style={styles.overlayTextInputStyle}
-              onChangeText={ color => onChangeColor(color.toLowerCase())}
+              onChangeText={(value) => onModalDataChange('color', value.toLowerCase())}
               value={data.color}
             />
             <Icon 
               style={styles.closeIconTextInputStyle}
               name='close'
-              onPress={() => onClearColor()}
+              onPress={() => onModalDataChange('color', '')}
             />
           </View>
 
@@ -88,7 +80,7 @@ const DataOverlay = ({
             <Button
               title='CLOSE'
               type='clear'
-              onPress={() => onClose()}
+              onPress={() => onToggle()}
             />
           </View>
         </View>
