@@ -24,7 +24,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.valvic6.rnstarter"
+    },
+    "description": "",
+    "android": {
+      "package": "com.valvic6.rnstarter"
     }
   }
 }
