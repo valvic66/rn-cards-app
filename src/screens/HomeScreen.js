@@ -1,25 +1,34 @@
 import React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Button } from 'react-native-elements';
 
 
 const HomeScreen = (props) => {
   return (
     <View style={styles.homeScreenWrapperStyle}>
-      <Button title='Go to cards' onPress={() => props.navigation.navigate('Cards')} />
-      <Button title='Go to Json Api' onPress={() => props.navigation.navigate('JsonApi')} />
+      <View style={styles.cardsScreenButtonStyle}>
+        <Button title='CARDS SCREEN' onPress={() => props.navigation.navigate('Cards')} />
+      </View>
+      <View style={styles.jsonApiSCreenStyle}>
+        <Button title='JSON API SCREEN' onPress={() => props.navigation.navigate('JsonApi')} />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 20
-  },
   homeScreenWrapperStyle: {
+    borderColor: 'black',
+    borderWidth: 1,
     display: 'flex',
-    justifyContent: 'center',
-    height: '100%'
+    flex: 1,
+    justifyContent: 'center'
+  },
+  cardsScreenButtonStyle: {
+    paddingVertical: 10
+  },
+  jsonApiSCreenStyle: {
+    paddingVertical: 10
   }
 });
 
