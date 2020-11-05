@@ -24,22 +24,8 @@ const CardsScreen = () => {
   };
 
   const handleModalDataChange = (field, value) => {
-    switch(field) {
-      case 'firstName':
-        setOverlayData({...overlayData, firstName: value});
-        break;
-      case 'lastName':
-        setOverlayData({...overlayData, lastName: value});
-        break;
-      case 'age':
-        setOverlayData({...overlayData, age: value});
-        break;
-      case 'color':
-        setOverlayData({...overlayData, color: value});
-        break;
-      default:
-    }
-  }
+    setOverlayData({...overlayData, [field]: value});
+  };
 
   return (
     <View style={{flex: 1}}>
