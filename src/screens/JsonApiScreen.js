@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Text, StyleSheet, View, Image, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { Text, StyleSheet, View, Image, ScrollView, ActivityIndicator } from "react-native";
 import { Button } from 'react-native-elements';
 import api from '../api/api';
 
 const JsonApiScreen = () => {
   const [results, setResults] = useState([]);
+  const [isCallStarted, setCallStart] = useState(false);
 
-  const getData = async () => {
+  const getApiData = async () => {
     try {
       const res = await api.get('/photos');
       setResults(res.data);
@@ -15,28 +16,32 @@ const JsonApiScreen = () => {
     }
   }
 
-  const src = results && results[0] && results[0].thumbnailUrl;
-  console.log('src', src);
-
-  const renderData = () => {
+  const renderApiData = () => {
     return results.map((result, index) => {
-      if(index > 500) {
+      if(index > 100) {
         return null;
       }
       return (
-      <View key={index} >
+      <View key={index}>
+        <Text>ID: {result.id}</Text>
         <Image style={{width: 200, height: 200}} source={{uri: result.thumbnailUrl}} />
       </View>)
     })
   }
 
+  const isLoading = results.length === 0;
+
   return (
     <View style={styles.jsonApiScreenWrapperStyle}>
-      <Button title='Get JsonApi data' onPress={() => getData()} />
-      <Text>{results.length}</Text>
-      <Text>{results && results[0] && results[0].id}</Text>
+      <Button title='GET DATA' onPress={() => {
+          getApiData();
+          setCallStart(true);
+        }}
+      />
+      {isCallStarted && <ActivityIndicator animating={isLoading} size='large'/>}
+      {results.length > 0 && <Text style={{textAlign: 'center'}}>{results.length} results loaded</Text>}
       <ScrollView>
-        {renderData()}
+        {renderApiData()}
       </ScrollView>
     </View>
   );
