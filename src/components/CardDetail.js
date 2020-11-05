@@ -5,7 +5,12 @@ import Modal from './Modal'
 
 const CardDetail = ({id, firstName, lastName, age, color, onChangeData, onDeleteData}) => {
   const [ isOverlayVisible, setOverlayVisibility ] = useState(false);
-  const [ overlayData, setOverlayData ] = useState({});
+  const [ overlayData, setOverlayData ] = useState({
+    firstName,
+    lastName,
+    age,
+    color
+  });
 
   const cardName = `${firstName} ${lastName}`.toUpperCase();
 
