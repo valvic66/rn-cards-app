@@ -1,27 +1,20 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, View } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { Button, Card, Overlay, Input } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import DataOverlay from '../components/DataOverlay'
+import { Button, Card } from 'react-native-elements';
+import Modal from './Modal'
 
 const CardDetail = ({id, firstName, lastName, age, color, onChangeData, onDeleteData}) => {
   const [ isOverlayVisible, setOverlayVisibility ] = useState(false);
-  const [ overlayData, setOverlayData ] = useState({
-    firstName,
-    lastName,
-    age,
-    color
-  });
+  const [ overlayData, setOverlayData ] = useState({});
 
-  const getPreferedColor = () => {
+  const cardName = `${firstName} ${lastName}`.toUpperCase();
+
+  const getPreferedColorStyle = () => {
     return {
       color: color.toLowerCase(),
       fontSize: 20,
     }
   };
-
-  const cardName = `${firstName} ${lastName}`.toUpperCase();
 
   const toggleOverlayVisibility = () => {
     setOverlayVisibility(!isOverlayVisible);
@@ -34,7 +27,7 @@ const CardDetail = ({id, firstName, lastName, age, color, onChangeData, onDelete
   return (
     <View style={{flex: 1}}>
       <Card style={styles.cardDetailWrapper}>
-        <Card.Title style={getPreferedColor()}>{cardName}</Card.Title>
+        <Card.Title style={getPreferedColorStyle()}>{cardName}</Card.Title>
         <Card.Divider />
 
         <Text style={styles.fieldLabel}>First name</Text>
@@ -62,7 +55,8 @@ const CardDetail = ({id, firstName, lastName, age, color, onChangeData, onDelete
         </View>
       </Card>
 
-      <DataOverlay
+      <Modal
+        title='Edit person'
         data={overlayData}
         isVisible={isOverlayVisible}
         onModalDataChange={(field, value) => handleModalDataChange(field, value)}
@@ -76,13 +70,7 @@ const CardDetail = ({id, firstName, lastName, age, color, onChangeData, onDelete
   )
 };
 
-const WIDTH_50 = '50%';
-const WIDTH_80 = '80%';
-
 const styles = StyleSheet.create({
-  cardDetailWrapper: {
-    
-  },
   fieldLabel: {
     borderBottomColor: 'black',
     borderBottomWidth: 1

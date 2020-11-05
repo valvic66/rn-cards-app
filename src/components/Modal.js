@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Text, StyleSheet, View } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { Button, Card, Overlay, Input } from 'react-native-elements';
+import { Button, Overlay, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const DataOverlay = ({
+const Modal = ({
+  title,
   data,
   onModalDataChange,
   onToggle, 
@@ -15,6 +15,7 @@ const DataOverlay = ({
     <View>
       <Overlay isVisible={isVisible} onBackdropPress={onToggle} overlayStyle={styles.overlayStyle}>
         <View>
+          <Text style={styles.titleTextStyle}>{title}</Text>
           <View style={styles.textInputWrapperStyle}>
             <Input
               placeholder="First name"
@@ -89,20 +90,19 @@ const DataOverlay = ({
   )
 }
 
-const WIDTH_50 = '50%';
 const WIDTH_80 = '80%';
-
 const styles = StyleSheet.create({
-  cardDetailWrapper: {
-    
-  },
   overlayStyle: {
     width: WIDTH_80,
     padding: 10,
     display: 'flex',
     flexDirection: 'column'
   },
-  overlayTextInputStyle: {
+  titleTextStyle: {
+    textAlign: 'center',
+    fontSize: 16,
+    textTransform: 'uppercase',
+    padding: 5
   },
   closeIconStyle: {
     fontSize: 20,
@@ -144,4 +144,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default DataOverlay;
+export default Modal;

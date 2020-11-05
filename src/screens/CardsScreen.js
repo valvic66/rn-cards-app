@@ -2,22 +2,13 @@ import React, { useState, useReducer } from "react";
 import { Text, StyleSheet, View, FlatList } from "react-native";
 import CardDetail from "../components/CardDetail";
 import { reducer, initialState } from '../utils/reducer';
-import { Button, Card, Overlay, Divider, Input , ButtonGroup, BottomSheet} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import DataOverlay from '../components/DataOverlay';
-
-const WIDTH_50 = '50%';
-const WIDTH_80 = '80%';
+import { Button } from 'react-native-elements';
+import Modal from '../components/Modal';
 
 const CardsScreen = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [ isOverlayVisible, setOverlayVisibility ] = useState(false);
-  const [ overlayData, setOverlayData ] = useState({
-    firstName: '',
-    lastName: '',
-    age: '',
-    color: ''
-  });
+  const [ overlayData, setOverlayData ] = useState({});
 
   const toggleOverlayVisibility = () => {
     setOverlayVisibility(!isOverlayVisible);
@@ -29,7 +20,8 @@ const CardsScreen = () => {
 
   return (
     <View style={{flex: 1}}>
-      <DataOverlay
+      <Modal
+        title="Add person"
         data={overlayData}
         isVisible={isOverlayVisible}
         onModalDataChange={(field, value) => handleModalDataChange(field, value)}
@@ -77,7 +69,7 @@ const CardsScreen = () => {
           title='ADD PERSON'
           type='outline'
           onPress={() => {
-            toggleOverlayVisibility()
+            toggleOverlayVisibility();
           }}
         />
       </View>
@@ -118,8 +110,6 @@ const CardsScreen = () => {
           keyExtractor={(item) => item.id}
         />
       </View>
-
-      
     </View>
   );
 };
@@ -140,14 +130,6 @@ const styles = StyleSheet.create({
   },
   cardsStyle: {
     flex: 1
-  },
-  overlayStyle: {
-    width: WIDTH_80,
-    padding: 10,
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  overlayTextInputStyle: {
   },
   closeIconStyle: {
     fontSize: 20,
