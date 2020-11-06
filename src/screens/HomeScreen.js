@@ -18,8 +18,6 @@ const HomeScreen = (props) => {
 
 const styles = StyleSheet.create({
   homeScreenWrapperStyle: {
-    borderColor: 'black',
-    borderWidth: 1,
     display: 'flex',
     flex: 1,
     justifyContent: 'center'
