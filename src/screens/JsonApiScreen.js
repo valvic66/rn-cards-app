@@ -1,37 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Text, StyleSheet, View, Image, ScrollView, ActivityIndicator } from "react-native";
-import api from '../api/api';
+import React from "react";
+import { Text, StyleSheet, View, ScrollView, ActivityIndicator } from "react-native";
+import useJsonApiResults from '../hooks/useJsonApiResults';
 
 const JsonApiScreen = () => {
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const getApiData = async () => {
-    try {
-      const res = await api.get('/photos');
-      setResults(res.data);
-      setLoading(false);
-    } catch(err) {
-      console.log(err);
-    }
-  }
-
-  const renderApiData = () => {
-    return results.map((result, index) => {
-      if(index > 100) {
-        return null;
-      }
-      return (
-      <View key={index}>
-        <Text>ID: {result.id}</Text>
-        <Image style={{width: 200, height: 200}} source={{uri: result.thumbnailUrl}} />
-      </View>)
-    })
-  }
-
-  useEffect(() => {
-    getApiData();
-  }, []);
+  const [ results, loading, renderApiData ] = useJsonApiResults();
 
   if(loading) {
     return <ActivityIndicator animating={loading} size='large' style={styles.activityIndicatorStyle} />  
