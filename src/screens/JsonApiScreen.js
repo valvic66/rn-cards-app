@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, StyleSheet, View, Image, ScrollView, ActivityIndicator } from "react-native";
-import { Button } from 'react-native-elements';
 import api from '../api/api';
 
 const JsonApiScreen = () => {
   const [results, setResults] = useState([]);
-  const [isCallStarted, setCallStart] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const getApiData = async () => {
     try {
       const res = await api.get('/photos');
       setResults(res.data);
+      setLoading(false);
     } catch(err) {
       console.log(err);
     }
@@ -29,16 +29,16 @@ const JsonApiScreen = () => {
     })
   }
 
-  const isLoading = results.length === 0;
+  useEffect(() => {
+    getApiData();
+  }, []);
+
+  if(loading) {
+    return <ActivityIndicator animating={loading} size='large' style={styles.activityIndicatorStyle} />  
+  }
 
   return (
     <View style={styles.jsonApiScreenWrapperStyle}>
-      <Button title='GET DATA' onPress={() => {
-          getApiData();
-          setCallStart(true);
-        }}
-      />
-      {isCallStarted && <ActivityIndicator animating={isLoading} size='large'/>}
       {results.length > 0 && <Text style={{textAlign: 'center'}}>{results.length} results loaded</Text>}
       <ScrollView>
         {renderApiData()}
@@ -49,6 +49,9 @@ const JsonApiScreen = () => {
 
 const styles = StyleSheet.create({
   jsonApiScreenWrapperStyle: {
+    flex: 1
+  },
+  activityIndicatorStyle: {
     flex: 1
   }
 });
