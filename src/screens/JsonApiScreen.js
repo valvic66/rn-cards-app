@@ -3,9 +3,13 @@ import { Text, StyleSheet, View, ScrollView, ActivityIndicator } from "react-nat
 import useJsonApiResults from '../hooks/useJsonApiResults';
 
 const JsonApiScreen = () => {
-  const [ results, loading, renderApiData ] = useJsonApiResults();
+  const [ results, loading, error, renderApiData ] = useJsonApiResults();
 
   if(loading) {
+    if(error) {
+      return <Text style={styles.errorMessageStyle}>{error}</Text>
+    }
+
     return <ActivityIndicator animating={loading} size='large' style={styles.activityIndicatorStyle} />  
   }
 
@@ -25,6 +29,12 @@ const styles = StyleSheet.create({
   },
   activityIndicatorStyle: {
     flex: 1
+  },
+  errorMessageStyle: {
+    flex: 1,
+    fontSize: 20,
+    textAlign: 'center',
+    color: '#f00'
   }
 });
 
