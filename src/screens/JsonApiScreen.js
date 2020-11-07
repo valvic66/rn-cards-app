@@ -1,9 +1,10 @@
 import React from "react";
-import { Text, StyleSheet, View, ScrollView, ActivityIndicator } from "react-native";
+import { Text, StyleSheet, View, ScrollView, ActivityIndicator, Image } from "react-native";
 import useJsonApiResults from '../hooks/useJsonApiResults';
+import { LIMIT_API_RESPONSE_ITEMS } from '../constants/JsonApiScreen';
 
 const JsonApiScreen = () => {
-  const [ results, loading, error, renderApiData ] = useJsonApiResults();
+  const [ results, loading, error, getApiData ] = useJsonApiResults();
 
   if(loading) {
     if(error) {
@@ -12,6 +13,19 @@ const JsonApiScreen = () => {
 
     return <ActivityIndicator animating={loading} size='large' style={styles.activityIndicatorStyle} />  
   }
+
+  const renderApiData = () => {
+    return results.map((result, index) => {
+      if(index > LIMIT_API_RESPONSE_ITEMS) {
+        return null;
+      }
+      return (
+      <View key={index}>
+        <Text>ID: {result.id}</Text>
+        <Image style={{width: 200, height: 200}} source={{uri: result.thumbnailUrl}} />
+      </View>)
+    })
+  };
 
   return (
     <View style={styles.jsonApiScreenWrapperStyle}>

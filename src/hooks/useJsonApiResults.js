@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from '../api/api';
-import { View, Text, Image } from 'react-native';
-import { ERROR_MESSAGE, LIMIT_API_RESPONSE_ITEMS } from '../constants/JsonApiScreen';
+import { ERROR_MESSAGE } from '../constants/JsonApiScreen';
 
 export default () => {
   const [results, setResults] = useState([]);
@@ -19,22 +18,9 @@ export default () => {
     }
   };
 
-  const renderApiData = () => {
-    return results.map((result, index) => {
-      if(index > LIMIT_API_RESPONSE_ITEMS) {
-        return null;
-      }
-      return (
-      <View key={index}>
-        <Text>ID: {result.id}</Text>
-        <Image style={{width: 200, height: 200}} source={{uri: result.thumbnailUrl}} />
-      </View>)
-    })
-  };
-
   useEffect(() => {
     getApiData();
   }, []);
 
-  return [results, loading, error, renderApiData];
+  return [results, loading, error, getApiData];
 }
