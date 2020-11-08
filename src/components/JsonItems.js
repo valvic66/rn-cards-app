@@ -1,9 +1,10 @@
 import React from 'react';
 import JsonItem from './JsonItem';
 import { LIMIT_API_RESPONSE_ITEMS } from '../constants/JsonApiScreen';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { withNavigation } from 'react-navigation';
 
-const JsonItems = ({ results }) => {
+const JsonItems = ({ results, navigation }) => {
   return results.map((result, index) => {
     const { id, title, thumbnailUrl } = result;
 
@@ -13,11 +14,13 @@ const JsonItems = ({ results }) => {
 
     return (
       <View key={index}>
-        <JsonItem 
-          id={id}
-          title={title}
-          url={thumbnailUrl}
-        />
+        <TouchableOpacity onPress={() => navigation.navigate('JsonItem', { id })}>
+          <JsonItem
+            id={id}
+            title={title}
+            url={thumbnailUrl}
+          />
+        </TouchableOpacity>
       </View>
     );
   })
@@ -25,4 +28,4 @@ const JsonItems = ({ results }) => {
 
 const styles = StyleSheet.create({});
 
-export default JsonItems;
+export default withNavigation(JsonItems);
