@@ -1,14 +1,14 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useContext } from "react";
 import { Text, StyleSheet, View, FlatList } from "react-native";
 import CardDetail from "../components/CardDetail";
-import { reducer, initialState } from '../utils/reducer';
 import { Button } from 'react-native-elements';
 import Modal from '../components/Modal';
+import CardsContext from '../context/CardsContext';
 
 const CardsScreen = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
   const [ isOverlayVisible, setOverlayVisibility ] = useState(false);
   const [ overlayData, setOverlayData ] = useState({});
+  const state = useContext(CardsContext);
 
   const toggleOverlayVisibility = () => {
     setOverlayVisibility(!isOverlayVisible);
@@ -27,7 +27,7 @@ const CardsScreen = () => {
         onModalDataChange={(field, value) => handleModalDataChange(field, value)}
         onToggle={() => toggleOverlayVisibility()}
         onSave={() => {
-          dispatch({type: 'add_person', payload: overlayData});
+          state.dispatch({type: 'add_person', payload: overlayData});
           toggleOverlayVisibility();
         }}
       />
@@ -35,32 +35,15 @@ const CardsScreen = () => {
         <Button
           title='Sort By Name Asc'
           type='clear'
-          onPress={() => dispatch({type: 'sort_by_name_asc'})}
+          onPress={() => state.dispatch({type: 'sort_by_name_asc'})}
         />
         <Button
           title='Sort By Name Dsc'
           type='clear'
-          onPress={() => dispatch({type: 'sort_by_name_dsc'})}
+          onPress={() => state.dispatch({type: 'sort_by_name_dsc'})}
         />
       </View>
 
-      <View style={styles.filterButtonGroupStyle}>
-        <Button
-          title='Filter By Age 0 to 18'
-          type='clear'
-          onPress={() => dispatch({type: 'filter_by_age', payload: {minAge: 0, maxAge: 18}})}
-        />
-        <Button
-          title='Reset Filters'
-          type='clear'
-          onPress={() => dispatch({type: 'reset_filters'})}
-        />
-        <Button
-          title='Reset ALL'
-          type='clear'
-          onPress={() => dispatch({type: 'reset_all'})}
-        />
-      </View>
       {state.persons.length > 0 && (
         <Text style={{textAlign: 'center'}}>Cards found: {state.persons.length}</Text>
       )}
@@ -86,10 +69,10 @@ const CardsScreen = () => {
                   age={item.age}
                   color={item.color}
                   onChangeColor={(id, newColor) => {
-                    dispatch({type: 'change_last_color', payload: newColor});
+                    state.dispatch({type: 'change_last_color', payload: newColor});
                   }}
                   onChangeData={(id, newPerson) => {
-                    dispatch({type: 'change_person', payload: {
+                    state.dispatch({type: 'change_person', payload: {
                       personId: id.toString(), 
                       firstName: newPerson.firstName, 
                       lastName: newPerson.lastName, 
@@ -97,7 +80,7 @@ const CardsScreen = () => {
                       color: newPerson.color
                     }})
                   }}
-                  onDeleteData={(id) => dispatch({
+                  onDeleteData={(id) => state.dispatch({
                     type: 'delete_person',
                     payload: {
                       deletePersonId: id.toString()
@@ -119,11 +102,6 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   sortByButtonGroupStyle: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around'
-  },
-  filterButtonGroupStyle: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around'

@@ -5,7 +5,7 @@ import JsonItem from '../components/JsonItem';
 
 const JsonItemScreen = ({ navigation }) => {
   const id = navigation.getParam('id');
-  const [result, setResult] = useState({});
+  const [result, setResult] = useState(null);
 
   const getResult = async (id) => {
     try {
@@ -19,6 +19,10 @@ const JsonItemScreen = ({ navigation }) => {
   useState(() => {
     getResult(id);
   }, []);
+
+  if(!result) {
+    return null;
+  }
 
   return (
     <View style={styles.jsonItemScreenWrapperStyle}>
