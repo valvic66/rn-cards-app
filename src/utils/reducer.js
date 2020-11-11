@@ -11,9 +11,8 @@ export const reducer = (state, action) => {
       return [...state, {id: String(state.length + 1), ...action.payload}];
     case 'delete_person':
       const { deletePersonId } = action.payload;
-      const slicedPersons = state.filter(person => person.id != deletePersonId);
-
-      return [...slicedPersons];
+      
+      return state.filter(person => person.id != deletePersonId);
     case 'sort_by_name_asc':
       const sortedPersonsByNameAsc = state.sort((a, b) => a.firstName.localeCompare(b.firstName));
       
