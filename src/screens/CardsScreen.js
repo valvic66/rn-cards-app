@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
-import { Text, StyleSheet, View, FlatList } from "react-native";
+import { Text, StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
 import CardDetail from "../components/CardDetail";
 import { Button } from 'react-native-elements';
 import Modal from '../components/Modal';
 import { Context } from '../context/CardsContext';
+import { FontAwesome, Entypo } from '@expo/vector-icons'; 
 
 const CardsScreen = () => {
   const [ isOverlayVisible, setOverlayVisibility ] = useState(false);
@@ -32,30 +33,23 @@ const CardsScreen = () => {
         }}
       />
       <View style={styles.sortByButtonGroupStyle}>
-        <Button
-          title='Sort By Name Asc'
-          type='clear'
-          onPress={() => dispatch({type: 'sort_by_name_asc'})}
-        />
-        <Button
-          title='Sort By Name Dsc'
-          type='clear'
-          onPress={() => dispatch({type: 'sort_by_name_dsc'})}
-        />
+        {state.length > 0 && (
+          <Text style={styles.cardsNumberStyle}>Cards found: {state.length}</Text>
+        )}
+        <View style={styles.buttonGroupStyle}>
+          <TouchableOpacity onPress={() => dispatch({type: 'sort_by_name_asc'})}>
+            <FontAwesome name='sort-amount-asc' style={styles.buttonStyle} color='grey' />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => dispatch({type: 'sort_by_name_dsc'})}>
+            <FontAwesome name='sort-amount-desc' style={styles.buttonStyle} color='grey' />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toggleOverlayVisibility()}>
+            <Entypo name='add-user' style={styles.buttonStyle} color='blue' />
+          </TouchableOpacity>
+        </View>
       </View>
 
-      {state.length > 0 && (
-        <Text style={{textAlign: 'center'}}>Cards found: {state.length}</Text>
-      )}
-      <View style={styles.addButtonStyle}>
-        <Button
-          title='ADD PERSON'
-          type='outline'
-          onPress={() => {
-            toggleOverlayVisibility();
-          }}
-        />
-      </View>
+      
 
       <View style={styles.cardsStyle}>
         <FlatList 
@@ -102,9 +96,21 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   sortByButtonGroupStyle: {
-    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'space-between',
+    padding: 15,
+    alignItems: 'center'
+  },
+  buttonGroupStyle: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  buttonStyle: {
+    padding: 8,
+    marginHorizontal: 2,
+    fontSize: 24,
+    textAlign: 'center',
+    borderRadius: 22
   },
   cardsStyle: {
     flex: 1
@@ -127,6 +133,9 @@ const styles = StyleSheet.create({
   addButtonStyle: {
     padding: 5,
     marginTop: 5
+  },
+  cardsNumberStyle: {
+    fontSize: 20
   }
 });
 

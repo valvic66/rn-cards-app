@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { Text, StyleSheet, View } from "react-native";
-import { Button, Card } from 'react-native-elements';
-import Modal from './Modal'
+import React, { useState } from 'react';
+import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Card } from 'react-native-elements';
+import Modal from './Modal';
+import { FontAwesome, AntDesign } from '@expo/vector-icons'; 
 
 const CardDetail = ({id, firstName, lastName, age, color, onChangeData, onDeleteData}) => {
   const [ isOverlayVisible, setOverlayVisibility ] = useState(false);
@@ -44,19 +45,19 @@ const CardDetail = ({id, firstName, lastName, age, color, onChangeData, onDelete
         <Text style={styles.fieldLabel}>Age</Text>
         <Text style={styles.ageText}>{age}</Text>
 
-        <View style={styles.editBtnStyle}>
-          <Button
-            title='EDIT' 
-            onPress={() => {
-              toggleOverlayVisibility();
-            }} 
-          />
-        </View> 
-        <View style={styles.deleteBtnStyle}>
-          <Button
-            title='DELETE' 
-            onPress={() => onDeleteData(id)} 
-          />
+        <View style={styles.headerIconsWrapperStyle}>
+          <TouchableOpacity onPress={() => toggleOverlayVisibility()}>
+            <AntDesign 
+              style={styles.headerIconStyle} 
+              name='edit'
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => onDeleteData(id)} >
+            <FontAwesome style={styles.headerIconStyle} 
+              name='trash-o'
+              color='red' 
+            />
+          </TouchableOpacity>
         </View>
       </Card>
 
@@ -98,6 +99,18 @@ const styles = StyleSheet.create({
   },
   deleteBtnStyle: {
     marginTop: 10
+  },
+  headerIconsWrapperStyle: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  headerIconStyle: {
+    padding: 8,
+    marginHorizontal: 2,
+    fontSize: 26,
+    textAlign: 'center',
+    borderRadius: 22
   }
 });
 
