@@ -1,12 +1,11 @@
 import React, { useState, useContext } from "react";
 import { Text, StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
 import CardDetail from "../components/CardDetail";
-import { Button } from 'react-native-elements';
 import Modal from '../components/Modal';
 import { Context } from '../context/CardsContext';
 import { FontAwesome, Entypo } from '@expo/vector-icons'; 
 
-const CardsScreen = () => {
+const CardsScreen = ({ navigation }) => {
   const [ isOverlayVisible, setOverlayVisibility ] = useState(false);
   const [ overlayData, setOverlayData ] = useState({});
   const { state, dispatch } = useContext(Context);
@@ -56,31 +55,33 @@ const CardsScreen = () => {
           data={state}
           renderItem={({item}) => {
               return (
-                <CardDetail
-                  id={item.id}  
-                  firstName={item.firstName}
-                  lastName={item.lastName}
-                  age={item.age}
-                  color={item.color}
-                  onChangeColor={(id, newColor) => {
-                    dispatch({type: 'change_last_color', payload: newColor});
-                  }}
-                  onChangeData={(id, newPerson) => {
-                    dispatch({type: 'change_person', payload: {
-                      personId: id.toString(), 
-                      firstName: newPerson.firstName, 
-                      lastName: newPerson.lastName, 
-                      age: newPerson.age, 
-                      color: newPerson.color
-                    }})
-                  }}
-                  onDeleteData={(id) => dispatch({
-                    type: 'delete_person',
-                    payload: {
-                      deletePersonId: id.toString()
-                    }
-                  })}
-                />
+                <TouchableOpacity onPress={() => navigation.navigate('CardDetail', { personId: item.id })}>
+                  <CardDetail
+                    id={item.id}  
+                    firstName={item.firstName}
+                    lastName={item.lastName}
+                    age={item.age}
+                    color={item.color}
+                    onChangeColor={(id, newColor) => {
+                      dispatch({type: 'change_last_color', payload: newColor});
+                    }}
+                    onChangeData={(id, newPerson) => {
+                      dispatch({type: 'change_person', payload: {
+                        personId: id.toString(), 
+                        firstName: newPerson.firstName, 
+                        lastName: newPerson.lastName, 
+                        age: newPerson.age, 
+                        color: newPerson.color
+                      }})
+                    }}
+                    onDeleteData={(id) => dispatch({
+                      type: 'delete_person',
+                      payload: {
+                        deletePersonId: id.toString()
+                      }
+                    })}
+                  />
+                </TouchableOpacity>    
               )
             }
           }

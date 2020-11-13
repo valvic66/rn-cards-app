@@ -5,14 +5,16 @@ import HomeScreen from './src/screens/HomeScreen';
 import CardsScreen from './src/screens/CardsScreen';
 import JsonApiScreen from './src/screens/JsonApiScreen';
 import JsonItemScreen from './src/screens/JsonItemScreen';
-import { Context, Provider } from './src/context/CardsContext';
+import CardDetailScreen from './src/screens/CardDetailScreen';
+import { Provider } from './src/context/CardsContext';
 
 const navigator = createStackNavigator(
   {
     Home: HomeScreen,
     Cards: CardsScreen,
     JsonApi: JsonApiScreen,
-    JsonItem: JsonItemScreen
+    JsonItem: JsonItemScreen,
+    CardDetail: CardDetailScreen
   },
   {
     initialRouteName: "Home",
