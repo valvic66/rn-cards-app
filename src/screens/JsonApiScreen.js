@@ -1,13 +1,22 @@
-import React from "react";
-import { Text, StyleSheet, View, ScrollView, ActivityIndicator } from "react-native";
+import React from 'react';
+import { Text, StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
 import useJsonApiResults from '../hooks/useJsonApiResults';
+import JsonItems from '../components/JsonItems';
 
 const JsonApiScreen = () => {
-  const [ results, loading, renderApiData ] = useJsonApiResults();
+  const [ results, loading, error ] = useJsonApiResults();
 
   if(loading) {
+    if(error) {
+      return <Text style={styles.errorMessageStyle}>{error}</Text>
+    }
+
     return <ActivityIndicator animating={loading} size='large' style={styles.activityIndicatorStyle} />  
   }
+
+  const renderApiData = () => {
+    return <JsonItems results={results} />
+  };
 
   return (
     <View style={styles.jsonApiScreenWrapperStyle}>
@@ -25,6 +34,12 @@ const styles = StyleSheet.create({
   },
   activityIndicatorStyle: {
     flex: 1
+  },
+  errorMessageStyle: {
+    flex: 1,
+    fontSize: 20,
+    textAlign: 'center',
+    color: '#f00'
   }
 });
 

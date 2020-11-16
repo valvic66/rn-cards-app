@@ -1,14 +1,14 @@
-import React, { useState, useReducer } from "react";
-import { Text, StyleSheet, View, FlatList } from "react-native";
+import React, { useState, useContext } from "react";
+import { Text, StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
 import CardDetail from "../components/CardDetail";
-import { reducer, initialState } from '../utils/reducer';
-import { Button } from 'react-native-elements';
 import Modal from '../components/Modal';
+import { Context } from '../context/CardsContext';
+import { FontAwesome, Entypo, AntDesign } from '@expo/vector-icons'; 
 
-const CardsScreen = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+const CardsScreen = ({ navigation }) => {
   const [ isOverlayVisible, setOverlayVisibility ] = useState(false);
   const [ overlayData, setOverlayData ] = useState({});
+  const { state, dispatch } = useContext(Context);
 
   const toggleOverlayVisibility = () => {
     setOverlayVisibility(!isOverlayVisible);
@@ -17,6 +17,15 @@ const CardsScreen = () => {
   const handleModalDataChange = (field, value) => {
     setOverlayData({...overlayData, [field]: value});
   };
+
+  const deletePerson = id => {
+    dispatch({
+      type: 'delete_person',
+      payload: {
+        deletePersonId: id.toString()
+      }
+    });
+  }
 
   return (
     <View style={{flex: 1}}>
@@ -32,78 +41,46 @@ const CardsScreen = () => {
         }}
       />
       <View style={styles.sortByButtonGroupStyle}>
-        <Button
-          title='Sort By Name Asc'
-          type='clear'
-          onPress={() => dispatch({type: 'sort_by_name_asc'})}
-        />
-        <Button
-          title='Sort By Name Dsc'
-          type='clear'
-          onPress={() => dispatch({type: 'sort_by_name_dsc'})}
-        />
-      </View>
-
-      <View style={styles.filterButtonGroupStyle}>
-        <Button
-          title='Filter By Age 0 to 18'
-          type='clear'
-          onPress={() => dispatch({type: 'filter_by_age', payload: {minAge: 0, maxAge: 18}})}
-        />
-        <Button
-          title='Reset Filters'
-          type='clear'
-          onPress={() => dispatch({type: 'reset_filters'})}
-        />
-        <Button
-          title='Reset ALL'
-          type='clear'
-          onPress={() => dispatch({type: 'reset_all'})}
-        />
-      </View>
-      {state.persons.length > 0 && (
-        <Text style={{textAlign: 'center'}}>Cards found: {state.persons.length}</Text>
-      )}
-      <View style={styles.addButtonStyle}>
-        <Button
-          title='ADD PERSON'
-          type='outline'
-          onPress={() => {
-            toggleOverlayVisibility();
-          }}
-        />
+        {state.length > 0 && (
+          <Text style={styles.cardsNumberStyle}>Cards found: {state.length}</Text>
+        )}
+        <View style={styles.buttonGroupStyle}>
+          <TouchableOpacity onPress={() => dispatch({type: 'sort_by_name_asc'})}>
+            <FontAwesome name='sort-amount-asc' style={styles.buttonStyle} color='grey' />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => dispatch({type: 'sort_by_name_dsc'})}>
+            <FontAwesome name='sort-amount-desc' style={styles.buttonStyle} color='grey' />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toggleOverlayVisibility()}>
+            <Entypo name='add-user' style={styles.buttonStyle} color='blue' />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.cardsStyle}>
         <FlatList 
-          data={state.persons}
+          data={state}
           renderItem={({item}) => {
               return (
-                <CardDetail
-                  id={item.id}  
-                  firstName={item.firstName}
-                  lastName={item.lastName}
-                  age={item.age}
-                  color={item.color}
-                  onChangeColor={(id, newColor) => {
-                    dispatch({type: 'change_last_color', payload: newColor});
-                  }}
-                  onChangeData={(id, newPerson) => {
-                    dispatch({type: 'change_person', payload: {
-                      personId: id.toString(), 
-                      firstName: newPerson.firstName, 
-                      lastName: newPerson.lastName, 
-                      age: newPerson.age, 
-                      color: newPerson.color
-                    }})
-                  }}
-                  onDeleteData={(id) => dispatch({
-                    type: 'delete_person',
-                    payload: {
-                      deletePersonId: id.toString()
-                    }
-                  })}
-                />
+                <TouchableOpacity onPress={() => navigation.navigate('CardDetail', { personId: item.id })}>
+                  <CardDetail
+                    id={item.id}  
+                    firstName={item.firstName}
+                    lastName={item.lastName}
+                    age={item.age}
+                    color={item.color}
+                    onChangeData={(id, newPerson) => {
+                      dispatch({type: 'edit_person', payload: {
+                        personId: id.toString(), 
+                        firstName: newPerson.firstName, 
+                        lastName: newPerson.lastName, 
+                        age: newPerson.age, 
+                        color: newPerson.color
+                      }})
+                    }}
+                    onDeleteData={deletePerson}
+                  />
+                </TouchableOpacity>    
               )
             }
           }
@@ -114,19 +91,36 @@ const CardsScreen = () => {
   );
 };
 
+CardsScreen.navigationOptions = ({ navigation }) => {
+  return {
+    headerRight: () => (
+      <TouchableOpacity onPress={() => navigation.navigate('CardCreate')}>
+        <AntDesign style={styles.headerRightIconStyle} name="plus" size={26} color="black" />
+      </TouchableOpacity>
+    )
+  };
+}
+
 const styles = StyleSheet.create({
   text: {
     fontSize: 20
   },
   sortByButtonGroupStyle: {
-    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'space-between',
+    padding: 15,
+    alignItems: 'center'
   },
-  filterButtonGroupStyle: {
-    display: 'flex',
+  buttonGroupStyle: {
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    alignItems: 'center'
+  },
+  buttonStyle: {
+    padding: 8,
+    marginHorizontal: 2,
+    fontSize: 24,
+    textAlign: 'center',
+    borderRadius: 22
   },
   cardsStyle: {
     flex: 1
@@ -149,6 +143,13 @@ const styles = StyleSheet.create({
   addButtonStyle: {
     padding: 5,
     marginTop: 5
+  },
+  cardsNumberStyle: {
+    fontSize: 20
+  },
+  headerRightIconStyle: {
+    marginRight: 10,
+    padding: 5
   }
 });
 
