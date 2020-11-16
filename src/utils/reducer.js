@@ -22,19 +22,15 @@ export const reducer = (state, action) => {
         
       return [...sortedPersonsByNameDsc];
     case 'edit_person':
-      const { personId, firstName, lastName, age, color } = action.payload;
-      const personsCopy = state;
+      const { personId } = action.payload;
 
-      personsCopy.forEach(person => {
+      return state.map(person => {
         if(person.id === personId) {
-          person.firstName = firstName;
-          person.lastName = lastName;
-          person.age = age;
-          person.color = color;
+          return {id: personId, ...action.payload};
+        } else {
+          return person;
         }
-      })
-
-      return [...personsCopy];
+      });
     default:
       return state;
   }
