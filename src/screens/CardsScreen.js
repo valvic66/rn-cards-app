@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, FlatList, TouchableOpacity } from "react-native
 import CardDetail from "../components/CardDetail";
 import Modal from '../components/Modal';
 import { Context } from '../context/CardsContext';
-import { FontAwesome, Entypo } from '@expo/vector-icons'; 
+import { FontAwesome, Entypo, AntDesign } from '@expo/vector-icons'; 
 
 const CardsScreen = ({ navigation }) => {
   const [ isOverlayVisible, setOverlayVisibility ] = useState(false);
@@ -17,6 +17,15 @@ const CardsScreen = ({ navigation }) => {
   const handleModalDataChange = (field, value) => {
     setOverlayData({...overlayData, [field]: value});
   };
+
+  const deletePerson = id => {
+    dispatch({
+      type: 'delete_person',
+      payload: {
+        deletePersonId: id.toString()
+      }
+    });
+  }
 
   return (
     <View style={{flex: 1}}>
@@ -48,8 +57,6 @@ const CardsScreen = ({ navigation }) => {
         </View>
       </View>
 
-      
-
       <View style={styles.cardsStyle}>
         <FlatList 
           data={state}
@@ -62,11 +69,8 @@ const CardsScreen = ({ navigation }) => {
                     lastName={item.lastName}
                     age={item.age}
                     color={item.color}
-                    onChangeColor={(id, newColor) => {
-                      dispatch({type: 'change_last_color', payload: newColor});
-                    }}
                     onChangeData={(id, newPerson) => {
-                      dispatch({type: 'change_person', payload: {
+                      dispatch({type: 'edit_person', payload: {
                         personId: id.toString(), 
                         firstName: newPerson.firstName, 
                         lastName: newPerson.lastName, 
@@ -74,12 +78,7 @@ const CardsScreen = ({ navigation }) => {
                         color: newPerson.color
                       }})
                     }}
-                    onDeleteData={(id) => dispatch({
-                      type: 'delete_person',
-                      payload: {
-                        deletePersonId: id.toString()
-                      }
-                    })}
+                    onDeleteData={deletePerson}
                   />
                 </TouchableOpacity>    
               )
@@ -91,6 +90,16 @@ const CardsScreen = ({ navigation }) => {
     </View>
   );
 };
+
+CardsScreen.navigationOptions = ({ navigation }) => {
+  return {
+    headerRight: () => (
+      <TouchableOpacity onPress={() => navigation.navigate('CardCreate')}>
+        <AntDesign style={styles.headerRightIconStyle} name="plus" size={26} color="black" />
+      </TouchableOpacity>
+    )
+  };
+}
 
 const styles = StyleSheet.create({
   text: {
@@ -137,6 +146,10 @@ const styles = StyleSheet.create({
   },
   cardsNumberStyle: {
     fontSize: 20
+  },
+  headerRightIconStyle: {
+    marginRight: 10,
+    padding: 5
   }
 });
 

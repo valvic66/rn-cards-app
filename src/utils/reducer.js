@@ -21,7 +21,7 @@ export const reducer = (state, action) => {
       const sortedPersonsByNameDsc = state.sort((a, b) => b.firstName.localeCompare(a.firstName));
         
       return [...sortedPersonsByNameDsc];
-    case 'change_person':
+    case 'edit_person':
       const { personId, firstName, lastName, age, color } = action.payload;
       const personsCopy = state;
 
