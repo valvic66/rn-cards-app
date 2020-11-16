@@ -1,8 +1,8 @@
 export const initialState = [
-  {id: '1000', firstName: 'Valentin', lastName: 'Micu', age: '20', color: 'green'},
-  {id: '1001', firstName: 'Victoria', lastName: 'Micu', age: '18', color: 'pink'},
-  {id: '1002', firstName: 'Andu', lastName: 'Micu', age: '10', color: 'blue'},
-  {id: '1003', firstName: 'Luca', lastName: 'Micu', age: '14', color: 'yellow'}
+  // {id: '1000', firstName: 'Valentin', lastName: 'Micu', age: '20', color: 'green'},
+  // {id: '1001', firstName: 'Victoria', lastName: 'Micu', age: '18', color: 'pink'},
+  // {id: '1002', firstName: 'Andu', lastName: 'Micu', age: '10', color: 'blue'},
+  // {id: '1003', firstName: 'Luca', lastName: 'Micu', age: '14', color: 'yellow'}
 ];
   
 export const reducer = (state, action) => {
@@ -31,6 +31,8 @@ export const reducer = (state, action) => {
           return person;
         }
       });
+    case 'get_cards':
+      return action.payload;
     default:
       return state;
   }

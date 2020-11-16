@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Text, StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
 import CardDetail from "../components/CardDetail";
 import Modal from '../components/Modal';
 import { Context } from '../context/CardsContext';
-import { FontAwesome, Entypo, AntDesign } from '@expo/vector-icons'; 
+import { FontAwesome, Entypo, AntDesign } from '@expo/vector-icons';
+import jsonServerApi from '../api/jsonServerApi';
 
 const CardsScreen = ({ navigation }) => {
   const [ isOverlayVisible, setOverlayVisibility ] = useState(false);
@@ -25,7 +26,21 @@ const CardsScreen = ({ navigation }) => {
         deletePersonId: id.toString()
       }
     });
-  }
+  };
+
+  const getCards = async () => {
+    try {
+      const response = await jsonServerApi.get('/cards');
+      
+      dispatch({type: 'get_cards', payload: response.data});
+    } catch(error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getCards();
+  }, []);
 
   return (
     <View style={{flex: 1}}>
